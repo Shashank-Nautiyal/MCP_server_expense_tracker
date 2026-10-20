@@ -1,3 +1,4 @@
+from datetime import date as Date
 import asyncio
 import os
 import sys
@@ -33,9 +34,16 @@ async def add_expense(
     note: str = "",
 ):
     """Add a new expense to the database."""
+    try:
+        expense_date = Date.fromisoformat(date)
+    except ValueError:
+        return {
+        "status": "error",
+        "message": "Invalid date. Use YYYY-MM-DD format."
+    }
     async with session_Local() as db:
         expense = Expense(
-            date=date,
+            date=expense_date,
             amount=amount,
             category=category,
             subcategory=subcategory,
@@ -102,13 +110,30 @@ async def delete_expense(expense_id: int):
         }
 
 
+
 @mcp.tool()
 async def list_expenses(start_date: str, end_date: str):
     """List expenses within an inclusive date range."""
+
+    try:
+        start = Date.fromisoformat(start_date)
+        end = Date.fromisoformat(end_date)
+    except ValueError:
+        return {
+            "status": "error",
+            "message": "Invalid date. Use YYYY-MM-DD format."
+        }
+
+    if start > end:
+        return {
+            "status": "error",
+            "message": "start_date must be before or equal to end_date."
+        }
+
     async with session_Local() as db:
         result = await db.execute(
             select(Expense)
-            .where(Expense.date >= start_date, Expense.date <= end_date)
+            .where(Expense.date >= start, Expense.date <= end)
             .order_by(Expense.date.asc(), Expense.id.asc())
         )
         expenses = result.scalars().all()
@@ -126,12 +151,29 @@ async def list_expenses(start_date: str, end_date: str):
         ]
 
 
+
 @mcp.tool()
 async def summarize(start_date: str, end_date: str, category: str | None = None):
     """Summarize expenses by category within an inclusive date range."""
+
+    try:
+        start = Date.fromisoformat(start_date)
+        end = Date.fromisoformat(end_date)
+    except ValueError:
+        return {
+            "status": "error",
+            "message": "Invalid date. Use YYYY-MM-DD format."
+        }
+
+    if start > end:
+        return {
+            "status": "error",
+            "message": "start_date must be before or equal to end_date."
+        }
+
     stmt = (
         select(Expense.category, func.sum(Expense.amount).label("total_amount"))
-        .where(Expense.date >= start_date, Expense.date <= end_date)
+        .where(Expense.date >= start, Expense.date <= end)
     )
 
     if category:
@@ -147,6 +189,7 @@ async def summarize(start_date: str, end_date: str, category: str | None = None)
         {"category": row.category, "total_amount": float(row.total_amount)}
         for row in rows
     ]
+
 
 
 @mcp.resource("expense://categories", mime_type="application/json")
