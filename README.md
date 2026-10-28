@@ -159,3 +159,6 @@ Approve the GitHub sign-in when asked. Then try prompts like "add a 50 rupee tea
 - Secrets live only in environment variables, never in the repository.
 - The user id always comes from the verified token, never from tool input.
 - Rows are filtered by `user_id` in every query, and ownership is checked again on update and delete.
+
+
+[![M8ven Score](https://m8ven.ai/badge/mcp/shashank-nautiyal-mcp-server-expense-tracker-8qoovn?v=ed62a865085c82335f10bc44679f5760)](https://m8ven.ai/mcp/shashank-nautiyal-mcp-server-expense-tracker-8qoovn?s=readme)
