@@ -1,10 +1,10 @@
-
 from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 
 from app.auth import current_user_id
 from app.database import session_Local
 from app.services import util as svc
+from app.tools.annotations import ADD, CHANGE, READ
 
 
 async def add_expense(
@@ -87,6 +87,8 @@ async def list_expenses(start_date: str, end_date: str):
 
 
 def register(mcp: FastMCP) -> None:
-    """Register every tool on the server. Called once from app/main.py."""
-    for tool in (add_expense, update_expense, delete_expense, list_expenses):
-        mcp.tool()(tool)
+    """Register the expense tools. Called from app/tools/__init__.py."""
+    mcp.tool(annotations=ADD)(add_expense)
+    mcp.tool(annotations=CHANGE)(update_expense)
+    mcp.tool(annotations=CHANGE)(delete_expense)
+    mcp.tool(annotations=READ)(list_expenses)
