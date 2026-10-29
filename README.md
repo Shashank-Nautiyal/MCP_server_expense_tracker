@@ -163,3 +163,7 @@ Approve the GitHub sign-in when asked. Then try prompts like "add a 50 rupee tea
 
 
 [![M8ven Score](https://m8ven.ai/badge/mcp/shashank-nautiyal-mcp-server-expense-tracker-8qoovn?v=cca63ec295cf6afa32af2d583b0e9c1b)](https://m8ven.ai/mcp/shashank-nautiyal-mcp-server-expense-tracker-8qoovn?s=readme)
+
+# Expense Tracker MCP Server
+
+[![M8ven Score](https://m8ven.ai/badge/mcp/shashank-nautiyal/mcp_server_expense_tracker)](https://m8ven.ai/mcp/shashank-nautiyal/mcp_server_expense_tracker?s=readme)
